@@ -6,10 +6,13 @@
  ************************************************************************/
 
 #include "myhead.h" 
+#define MAX_N 10
+#define MAX_USR 500
 
 char *config = "./chat.conf";
 int port;
 char name[20] = {0}, msg[512] = {0};
+struct User users[MAX_USR];
 
 int main(int argc, char **argv) {
     int opt;
@@ -29,13 +32,59 @@ int main(int argc, char **argv) {
                 exit(1);
         }
     }
-    char *p = read_conf(config, "name");
-    strcpy(name, p);
-    printf("name = %s\n", name);
-    
+
     if (!strlen(name)) {
         //命令行参数没写，读取配置文件
-        
+        strcpy(name, read_conf(config, "name"));
+    }
+    if (!port) port = atoi(read_conf(config, "port"));
+    if (!strlen(msg)) {
+        strcpy(msg, read_conf(config, "msg"));
+    }
+    DBG(L_RED"name = %s\n"NONE, name);
+    DBG(L_RED"port = %d\n"NONE, port);
+    DBG(L_RED"msg = %s\n"NONE, msg);
+    DBG(L_BLUE"Starting...\n"NONE);
+
+
+    int listener;
+    if ((listener = udp_socket_s(port))) {
+        perror("socket_create_udp");
+        exit(1);
+    }
+
+    int epollfd, subfd;
+
+    if ((epollfd = epoll_create(1)) < 0) {
+        perror("epoll_create");
+        exit(1);        
+    }
+
+    struct epoll_event ev, events[MAX_N];
+
+    ev.events = EPOLLIN;
+    ev.data.fd = listener;
+    if (epoll_ctl(epollfd, EPOLL_CTL_ADD, listener, &ev) < 0) {
+        perror("epoll_ctl");
+        exit(1);
+    }
+
+    while (1) {
+        int nfds = epoll_wait(epollfd, events, MAX_N, -1);
+        if (nfds < 0) {
+            perror("epoll_wait");
+            exit(1);
+        }
+        for (int i = 0; i < nfds; i++) {
+            struct User newuser;
+            int new_fd;
+            if ((new_fd = udp_accept(listener, &newuser)) < 0) {
+                fprintf(stderr, "error in upd_accent!\n");
+                continue;
+            }
+            //添加到从反应堆
+            add_to_sub_reactor(subfd, &newuser);
+        }
     }
 
 

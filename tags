@@ -4,15 +4,33 @@
 !_TAG_PROGRAM_NAME	Exuberant Ctags	//
 !_TAG_PROGRAM_URL	http://ctags.sourceforge.net	/official site/
 !_TAG_PROGRAM_VERSION	5.9~svn20110310	//
+DBG	include/myhead.h	27;"	d
+DBG	include/myhead.h	29;"	d
+L_BLUE	include/color.h	13;"	d
+L_GREEN	include/color.h	14;"	d
+L_RED	include/color.h	11;"	d
+L_YELLOW	include/color.h	12;"	d
+MAX_N	p2pchat.c	9;"	d	file:
+MAX_USR	p2pchat.c	10;"	d	file:
+NONE	include/color.h	10;"	d
+User	include/chat.h	/^struct User {$/;"	s
+_CHAT_H	include/chat.h	9;"	d
+_COLOR_H	include/color.h	9;"	d
 _CONF_H	include/conf.h	9;"	d
-_HEAD_H	include/head.h	9;"	d
+_HEAD_H	include/myhead.h	9;"	d
 _MYUDP_H	include/myudp.h	9;"	d
 config	p2pchat.c	/^char *config = ".\/chat.conf";$/;"	v
+fd	include/chat.h	/^    int fd;$/;"	m	struct:User
+flag	include/chat.h	/^    int flag;$/;"	m	struct:User
+heart_cnt	include/chat.h	/^    int heart_cnt;$/;"	m	struct:User
+ip	include/chat.h	/^    char ip[20];$/;"	m	struct:User
 main	p2pchat.c	/^int main(int argc, char **argv) {$/;"	f
 msg	p2pchat.c	/^char name[20] = {0}, msg[512] = {0};$/;"	v
+name	include/chat.h	/^    char name[20];$/;"	m	struct:User
 name	p2pchat.c	/^char name[20] = {0}, msg[512] = {0};$/;"	v
 port	p2pchat.c	/^int port;$/;"	v
 read_conf	include/conf.c	/^char *read_conf(const char *path, const char *key) {$/;"	f
 udp_socket	include/myudp.c	/^int udp_socket() {$/;"	f
 udp_socket_s	include/myudp.c	/^int udp_socket_s(int port){$/;"	f
+users	p2pchat.c	/^struct User users[MAX_USR];$/;"	v	typeref:struct:User
 value	include/conf.c	/^char value[128];$/;"	v
