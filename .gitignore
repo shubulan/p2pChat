@@ -1,0 +1,4 @@
+.iplist
+*.o
+*.a
+*.out
