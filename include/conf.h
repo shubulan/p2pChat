@@ -7,6 +7,5 @@
 
 #ifndef _CONF_H
 #define _CONF_H
-char *get_value(const char *path, coant char *key);
-
+char *read_conf(const char *path, const char *key);
 #endif

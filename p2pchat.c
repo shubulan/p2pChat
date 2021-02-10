@@ -5,10 +5,12 @@
 	> Created Time: Wed 10 Feb 2021 01:44:13 PM CST
  ************************************************************************/
 
-#include "head.h" 
+#include "myhead.h" 
 
+char *config = "./chat.conf";
 int port;
 char name[20] = {0}, msg[512] = {0};
+
 int main(int argc, char **argv) {
     int opt;
     while ((opt = getopt(argc, argv, "p:n:m")) != -1) {
@@ -27,6 +29,10 @@ int main(int argc, char **argv) {
                 exit(1);
         }
     }
+    char *p = read_conf(config, "name");
+    strcpy(name, p);
+    printf("name = %s\n", name);
+    
     if (!strlen(name)) {
         //命令行参数没写，读取配置文件
         

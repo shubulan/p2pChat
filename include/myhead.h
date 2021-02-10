@@ -12,8 +12,12 @@
 #include <sys/socket.h>
 #include <arpa/inet.h>
 #include <stdio.h>
+#include <unistd.h>
+#include <stdlib.h>
+#include <string.h>
 
 
 #include "myudp.h"
+#include "conf.h"
 
 #endif

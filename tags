@@ -1,0 +1,18 @@
+!_TAG_FILE_FORMAT	2	/extended format; --format=1 will not append ;" to lines/
+!_TAG_FILE_SORTED	1	/0=unsorted, 1=sorted, 2=foldcase/
+!_TAG_PROGRAM_AUTHOR	Darren Hiebert	/dhiebert@users.sourceforge.net/
+!_TAG_PROGRAM_NAME	Exuberant Ctags	//
+!_TAG_PROGRAM_URL	http://ctags.sourceforge.net	/official site/
+!_TAG_PROGRAM_VERSION	5.9~svn20110310	//
+_CONF_H	include/conf.h	9;"	d
+_HEAD_H	include/head.h	9;"	d
+_MYUDP_H	include/myudp.h	9;"	d
+config	p2pchat.c	/^char *config = ".\/chat.conf";$/;"	v
+main	p2pchat.c	/^int main(int argc, char **argv) {$/;"	f
+msg	p2pchat.c	/^char name[20] = {0}, msg[512] = {0};$/;"	v
+name	p2pchat.c	/^char name[20] = {0}, msg[512] = {0};$/;"	v
+port	p2pchat.c	/^int port;$/;"	v
+read_conf	include/conf.c	/^char *read_conf(const char *path, const char *key) {$/;"	f
+udp_socket	include/myudp.c	/^int udp_socket() {$/;"	f
+udp_socket_s	include/myudp.c	/^int udp_socket_s(int port){$/;"	f
+value	include/conf.c	/^char value[128];$/;"	v
