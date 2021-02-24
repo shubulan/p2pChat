@@ -33,3 +33,52 @@ int udp_socket() {
     }
     return sockfd;
 }
+int udp_connect(struct sockaddr_in *client) {
+    int sockfd;
+    if (sockfd = udp_socket() < 0) {
+        return -1;
+    }
+    if (connect(sockfd, (struct sockaddr *)client, sizeof(struct sockaddr)) < 0) {
+        return -1;
+    }
+    return sockfd;
+}
+
+int udp_accept(int fd, struct User *user) {
+    int new_fd;
+    struct sockaddr_in client;
+    socklen_t len = sizeof(client);
+    struct Msg request, response;
+    bzero(&request, sizeof(request));
+    bzero(&response, sizeof(response));
+    int ret = recvfrom(fd, (void *)&request, sizeof(request), 0, (struct sockaddr *)&client, &len); 
+    if (ret != sizeof(request)) {
+        response.type = CHAT_FIN; 
+        strcpy(response.buff, "Login Request Error!");
+        sendto(fd, (void *)&response, sizeof(response), 0, (struct sockaddr *)&client, len);
+        return -1;
+    }
+    /*
+    if (check_online(&request)) {
+        response.type = CHAT_FIN;
+        strcpy(response.msg, "Already lonin!");
+        sendto(fd, (void *)&response, sizeof(response), 0, (struct sockaddr *)&client, len);
+        return -1;
+    }
+    */
+    
+    strcpy(user->name, request.from);
+    user->flag = 1;
+    new_fd = udp_connect(&client);
+    if (new_fd < 0) {
+        perror("udp_connect");
+        return -1;
+    }
+    user->fd = new_fd;
+    sprintf(response.buff, "%s Login success!\n", user->name);
+    response.type = CHAT_ACK;
+    send(new_fd, (void *)&response, sizeof(response), 0);
+
+    return new_fd;
+}
+

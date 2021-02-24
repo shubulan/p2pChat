@@ -18,10 +18,10 @@
 #include <string.h>
 
 
+#include "chat.h"
 #include "myudp.h"
 #include "conf.h"
 #include "color.h"
-#include "chat.h"
 
 #ifdef _D
 #define DBG(fmt, args...) fprintf(stderr, fmt, ##args)

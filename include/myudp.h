@@ -9,5 +9,6 @@
 #define _MYUDP_H
 int udp_socket_s(int port); 
 int udp_socket(); 
-
+int udp_accept(int fd, struct User *user);
+int udp_connect(struct sockaddr_in *client);
 #endif

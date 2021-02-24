@@ -1,4 +1,4 @@
-/*************************************************************************
+/************************************************************************
 	> File Name: chat.h
 	> Author: shubulan
 	> Mail: gaoyulong1996@163.com
@@ -13,5 +13,16 @@ struct User {
     int flag;
     int fd;
     int heart_cnt;
+};
+
+#define CHAT_SYN 0x001
+#define CHAT_ACK 0x002
+#define CHAT_FIN 0x004
+#define CHAT_HEART 0x008
+struct Msg {
+    int type;
+    char from[20];
+    char to[20];
+    char buff[1024];
 };
 #endif
