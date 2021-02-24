@@ -83,7 +83,7 @@ int main(int argc, char **argv) {
                 continue;
             }
             //添加到从反应堆
-            add_to_sub_reactor(subfd, &newuser);
+            add_to_reactor(subfd, &newuser);
         }
     }
 

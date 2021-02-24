@@ -22,6 +22,7 @@
 #include "myudp.h"
 #include "conf.h"
 #include "color.h"
+#include "reactor.h"
 
 #ifdef _D
 #define DBG(fmt, args...) fprintf(stderr, fmt, ##args)
