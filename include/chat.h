@@ -7,6 +7,9 @@
 
 #ifndef _CHAT_H
 #define _CHAT_H
+
+#define FL_SYNSENT 0x001
+#define FL_ONLINE 0x002
 struct User {
     char name[20];
     char ip[20];
@@ -25,4 +28,5 @@ struct Msg {
     char to[20];
     char buff[1024];
 };
+void *client_discover(void *arg);
 #endif

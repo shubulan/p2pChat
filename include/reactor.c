@@ -6,7 +6,9 @@
  ************************************************************************/
 
 #include "myhead.h"
+#define MAXUSR 500
 
+extern struct User users[MAXUSR];
 void add_event_ptr(int epollfd, int fd, int events, struct User *user) {
     struct epoll_event ev;
     ev.events = events;
@@ -16,8 +18,8 @@ void add_event_ptr(int epollfd, int fd, int events, struct User *user) {
 
 int add_to_reactor(int fd, struct User *user) {
     int sub = user->fd;
-    user[sub] = *user;
-    add_event_ptr(fd, user[sub].fd, EPOLLIN | EPOLLET, &user[sub]);
+    users[sub] = *user;
 
+    add_event_ptr(fd, user[sub].fd, EPOLLIN | EPOLLET, &user[sub]);
 }
 

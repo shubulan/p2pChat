@@ -5,6 +5,7 @@
 	> Created Time: Wed 10 Feb 2021 12:51:12 PM CST
  ************************************************************************/
 #include "myhead.h"
+extern int port;
 
 int udp_socket_s(int port){
     int listener;
@@ -35,7 +36,7 @@ int udp_socket() {
 }
 int udp_connect(struct sockaddr_in *client) {
     int sockfd;
-    if (sockfd = udp_socket() < 0) {
+    if ((sockfd = udp_socket_s(port)) < 0) {
         return -1;
     }
     if (connect(sockfd, (struct sockaddr *)client, sizeof(struct sockaddr)) < 0) {
@@ -51,13 +52,16 @@ int udp_accept(int fd, struct User *user) {
     struct Msg request, response;
     bzero(&request, sizeof(request));
     bzero(&response, sizeof(response));
+
     int ret = recvfrom(fd, (void *)&request, sizeof(request), 0, (struct sockaddr *)&client, &len); 
+
     if (ret != sizeof(request)) {
         response.type = CHAT_FIN; 
         strcpy(response.buff, "Login Request Error!");
         sendto(fd, (void *)&response, sizeof(response), 0, (struct sockaddr *)&client, len);
         return -1;
     }
+
     /*
     if (check_online(&request)) {
         response.type = CHAT_FIN;
@@ -66,9 +70,16 @@ int udp_accept(int fd, struct User *user) {
         return -1;
     }
     */
-    
+    if (request.type != CHAT_SYN) {
+        response.type = CHAT_FIN; 
+        strcpy(response.buff, "request isn't SYN!");
+        sendto(fd, (void *)&response, sizeof(response), 0, (struct sockaddr *)&client, len);
+        return -1;
+    }
+    DBG("<receve SYN> from: %s\n", request.from);
+
     strcpy(user->name, request.from);
-    user->flag = 1;
+    user->flag = FL_ONLINE;
     new_fd = udp_connect(&client);
     if (new_fd < 0) {
         perror("udp_connect");
@@ -76,7 +87,7 @@ int udp_accept(int fd, struct User *user) {
     }
     user->fd = new_fd;
     sprintf(response.buff, "%s Login success!\n", user->name);
-    response.type = CHAT_ACK;
+    response.type = CHAT_ACK | CHAT_SYN;
     send(new_fd, (void *)&response, sizeof(response), 0);
 
     return new_fd;

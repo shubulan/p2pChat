@@ -63,8 +63,6 @@ int main(int argc, char **argv) {
         perror("epoll_create");
         exit(1);        
     }
-    DBG(L_BLUE"Starting...\n"NONE"main reactor: %d ok!\n", epollfd);
-    DBG(L_BLUE"Starting...\n"NONE"sub reactor: %d ok!\n", subfd);
 
     struct epoll_event ev, events[MAX_N];
 
@@ -74,6 +72,9 @@ int main(int argc, char **argv) {
         perror("epoll_ctl");
         exit(1);
     }
+    
+    pthread_t c_discover;
+    pthread_create(&c_discover, NULL, client_discover, NULL);
 
     while (1) {
         int nfds = epoll_wait(epollfd, events, MAX_N, -1);
@@ -81,6 +82,7 @@ int main(int argc, char **argv) {
             perror("epoll_wait");
             exit(1);
         }
+        DBG("receve data...\n");
         for (int i = 0; i < nfds; i++) {
             struct User newuser;
             int new_fd;
@@ -91,6 +93,7 @@ int main(int argc, char **argv) {
             //添加到从反应堆
             add_to_reactor(subfd, &newuser);
         }
+        DBG("receve data done!\n");
     }
 
 
