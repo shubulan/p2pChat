@@ -44,14 +44,14 @@ int main(int argc, char **argv) {
     DBG(L_RED"name = %s\n"NONE, name);
     DBG(L_RED"port = %d\n"NONE, port);
     DBG(L_RED"msg = %s\n"NONE, msg);
-    DBG(L_BLUE"Starting...\n"NONE);
 
 
     int listener;
-    if ((listener = udp_socket_s(port))) {
-        perror("socket_create_udp");
+    if ((listener = udp_socket_s(port)) < 0) {
+        perror("udp_socket_s");
         exit(1);
     }
+    DBG(L_BLUE"Starting...\n"NONE"listener %d ok!\n", listener);
 
     int epollfd, subfd;
 
@@ -59,6 +59,12 @@ int main(int argc, char **argv) {
         perror("epoll_create");
         exit(1);        
     }
+    if ((subfd = epoll_create(1)) < 0) {
+        perror("epoll_create");
+        exit(1);        
+    }
+    DBG(L_BLUE"Starting...\n"NONE"main reactor: %d ok!\n", epollfd);
+    DBG(L_BLUE"Starting...\n"NONE"sub reactor: %d ok!\n", subfd);
 
     struct epoll_event ev, events[MAX_N];
 
