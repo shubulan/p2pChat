@@ -89,7 +89,6 @@ int main(int argc, char **argv) {
             perror("epoll_wait");
             exit(1);
         }
-        DBG("got events ...\n");
         for (int i = 0; i < nfds; i++) {
             struct User newuser;
             int new_fd;
@@ -97,10 +96,9 @@ int main(int argc, char **argv) {
                 fprintf(stderr, "error in upd_accent!\n");
                 continue;
             }
-            //添加到从反应堆
+            DBG(L_GREEN"<Main> add %s to sub reactor\n"NONE, newuser.name);
             add_to_reactor(subfd, &newuser);
         }
-        DBG("events done!\n");
     }
 
 

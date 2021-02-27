@@ -8,8 +8,11 @@
 #include "myhead.h"
 
 extern struct User *users;
+extern char name[20];
 void *heart_beat(void *arg) {
     struct Msg heart;
+    heart.type = CHAT_HEART;
+    strcpy(heart.from, name);
     heart.type = CHAT_HEART;
     while (1) {
         for (int i = 0; i < MAX_USR; i++) {
@@ -17,6 +20,6 @@ void *heart_beat(void *arg) {
                 send(users[i].fd, (void *)&heart, sizeof(heart), 0);
             }
         }
-        sleep(2);
+        sleep(10);
     }
 }

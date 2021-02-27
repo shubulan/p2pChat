@@ -29,7 +29,7 @@ void *client_discover(void *arg) {
         exit(1);
     }
     char ip[15];
-    DBG("<client discover> starting...\n");
+    DBG(L_BLUE"<client discover>"NONE" starting...\n");
     client.sin_family = AF_INET;
     client.sin_port = htons(port);
 
@@ -37,6 +37,6 @@ void *client_discover(void *arg) {
         client.sin_addr.s_addr = inet_addr(ip);
         sendto(sockfd, (void *)&request, sizeof(request), 0, (struct sockaddr *)&client, sizeof(client));
     }
-    DBG("<client discover> end!\n");
+    DBG(L_BLUE"<client discover>"NONE" end!\n");
 
 }

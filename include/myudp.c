@@ -6,6 +6,7 @@
  ************************************************************************/
 #include "myhead.h"
 extern int port;
+extern char name[20];
 
 int udp_socket_s(int port){
     int listener;
@@ -72,16 +73,20 @@ int udp_accept(int fd, struct User *user) {
     }
     */
     if ((request.type & CHAT_SYN)&&(request.type & CHAT_ACK)) {
-        DBG(L_GREEN"<accept>"NONE" : SYNACK recived!\n"); 
+        DBG(L_GREEN"<main reactor>"NONE" : %s's SYNACK recieved!\n", request.from); 
+        response.type = CHAT_ACK;
+        return -1;
     } else if (request.type != CHAT_SYN) {
         response.type = CHAT_FIN; 
-        strcpy(response.buff, "request isn't SYN!");
+        strcpy(response.buff, " request isn't SYN!");
         sendto(fd, (void *)&response, sizeof(response), 0, (struct sockaddr *)&client, len);
         return -1;
+    } else {
+        //收到SYN包的逻辑
+        DBG(L_GREEN"<main reactor>"NONE"%s's SYN recieved!\n", request.from);
+        DBG("  Msg: %s\n", request.buff);
+        response.type = CHAT_ACK | CHAT_SYN;
     }
-    DBG("<recieve SYN> from: %s\n", request.from);
-    DBG("  Msg: %s\n", request.buff);
-
     strcpy(user->name, request.from);
     user->flag = FL_ONLINE;
     new_fd = udp_connect(&client);
@@ -91,10 +96,8 @@ int udp_accept(int fd, struct User *user) {
     }
     user->fd = new_fd;
     sprintf(response.buff, "%s Login success!\n", user->name);
-    response.type = CHAT_ACK | CHAT_SYN;
+    strcpy(response.from, name);
     send(new_fd, (void *)&response, sizeof(response), 0);
-    DBG("ack response send back!\n");
-
     return new_fd;
 }
 

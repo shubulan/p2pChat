@@ -31,19 +31,20 @@ void *sub_reactor(void *args) {
             int fd = ((struct User *)events[i].data.ptr)->fd;
             recv(fd, &msg, sizeof(msg), 0);
             if (msg.type & CHAT_HEART) {
-                printf("heart from %s\n", msg.from);   
+                DBG(L_RED"<sub reactor>"NONE" heart from %s\n", msg.from);   
                 msg.type = CHAT_ACK;
                 send(fd, &msg, sizeof(msg), 0);
             } else if (msg.type & CHAT_ACK) {
-                printf("ACK from %s\n", msg.from);
+                if (msg.type & CHAT_SYN) continue;
+                DBG(L_RED"<sub reactor>"NONE" ACK from %s\n", msg.from);
             } else if (msg.type & CHAT_FIN){
-                printf("bai bai\n");
+                DBG(L_RED"<sub reactor>"NONE" FIN fromt %s Good Bye!\n", msg.from);
                 //epoll_ctl del
                 users[fd].flag = FL_OFFLINE;
             } else if (msg.type & CHAT_MSG) {
-                printf("recv a msg......%s\n", msg.buff);
+                DBG(L_RED"<sub reactor>"NONE" recv a msg......%s\n", msg.buff);
             } else {
-                printf("lkasjdf\n");
+                DBG(L_RED"<sub reactor>"NONE" unkonw msg\n");
             }
         }
     }
