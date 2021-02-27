@@ -17,6 +17,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <pthread.h>
+#include <signal.h>
 
 
 #include "chat.h"

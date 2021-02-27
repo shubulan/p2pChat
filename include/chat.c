@@ -9,6 +9,7 @@ extern char *config;
 extern char name[20];
 extern char msg[512];
 extern int port; 
+extern struct User *users; 
 
 void *client_discover(void *arg) {
     char file[512] = "0";
@@ -39,4 +40,17 @@ void *client_discover(void *arg) {
     }
     DBG(L_BLUE"<client discover>"NONE" end!\n");
 
+}
+void logout(int signum) {
+    struct Msg lmsg;
+    lmsg.type = CHAT_FIN;
+    strcpy(lmsg.from, name);
+    strcpy(lmsg.buff, "Bye!");
+    for (int i = 0; i < MAX_USR; i++) {
+        if (users[i].flag == FL_ONLINE) {
+            send(users[i].fd, &lmsg, sizeof(lmsg), 0);
+        }
+    }
+    DBG(L_RED"%s quit!!"NONE, name);
+    exit(1);
 }

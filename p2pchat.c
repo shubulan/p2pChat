@@ -33,6 +33,7 @@ int main(int argc, char **argv) {
                 exit(1);
         }
     }
+    signal(SIGINT, logout);
 
     //命令行参数没写，读取配置文件
     if (!strlen(name)) {

@@ -21,6 +21,10 @@ int add_to_reactor(int fd, struct User *user) {
     users[sub] = *user;
     add_event_ptr(fd, users[sub].fd, EPOLLIN | EPOLLET, &users[sub]);
 }
+int del_from_reactor(int fd, struct User *user) {
+    epoll_ctl(subfd, EPOLL_CTL_DEL, fd, NULL);
+    return 1;
+}
 void *sub_reactor(void *args) {
     struct epoll_event events[20];
     struct Msg msg;
@@ -38,16 +42,17 @@ void *sub_reactor(void *args) {
                 if (msg.type & CHAT_SYN) continue;
                 DBG(L_RED"<sub reactor>"NONE" ACK from %s\n", msg.from);
             } else if (msg.type & CHAT_FIN){
-                DBG(L_RED"<sub reactor>"NONE" FIN fromt %s Good Bye!\n", msg.from);
-                //epoll_ctl del
+                DBG(L_RED"<sub reactor>"NONE" FIN from %s Good Bye!\n", msg.from);
+                del_from_reactor(fd, &users[i]);
+                close(fd);
                 users[fd].flag = FL_OFFLINE;
+                DBG(L_RED"<sub reactor>"NONE" %s is leaving..", msg.from);
             } else if (msg.type & CHAT_MSG) {
-                DBG(L_RED"<sub reactor>"NONE" recv a msg......%s\n", msg.buff);
+                DBG(L_RED"<sub reactor>"NONE" msg from %s:%s\n", msg.from, msg.buff);
             } else {
                 DBG(L_RED"<sub reactor>"NONE" unkonw msg\n");
             }
         }
     }
-    
 }
 

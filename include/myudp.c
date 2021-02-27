@@ -72,20 +72,12 @@ int udp_accept(int fd, struct User *user) {
         return -1;
     }
     */
-    if ((request.type & CHAT_SYN)&&(request.type & CHAT_ACK)) {
-        DBG(L_GREEN"<main reactor>"NONE" : %s's SYNACK recieved!\n", request.from); 
-        response.type = CHAT_ACK;
-        return -1;
-    } else if (request.type != CHAT_SYN) {
+    if (!(request.type & CHAT_SYN)) {
         response.type = CHAT_FIN; 
+        DBG("<main reactor> none syn recieved : %s\n", request.buff);
         strcpy(response.buff, " request isn't SYN!");
         sendto(fd, (void *)&response, sizeof(response), 0, (struct sockaddr *)&client, len);
         return -1;
-    } else {
-        //收到SYN包的逻辑
-        DBG(L_GREEN"<main reactor>"NONE"%s's SYN recieved!\n", request.from);
-        DBG("  Msg: %s\n", request.buff);
-        response.type = CHAT_ACK | CHAT_SYN;
     }
     strcpy(user->name, request.from);
     user->flag = FL_ONLINE;
@@ -95,9 +87,19 @@ int udp_accept(int fd, struct User *user) {
         return -1;
     }
     user->fd = new_fd;
-    sprintf(response.buff, "%s Login success!\n", user->name);
-    strcpy(response.from, name);
-    send(new_fd, (void *)&response, sizeof(response), 0);
+
+    if (request.type & CHAT_ACK) {
+        //收到SYN+ACK的逻辑
+        DBG(L_GREEN"<main reactor>"NONE" : %s's SYNACK recieved!\n", request.from); 
+    } else {
+        //收到SYN包的逻辑
+        DBG(L_GREEN"<main reactor>"NONE" %s's SYN recieved!\n", request.from);
+        DBG("  Msg: %s\n", request.buff);
+        response.type = CHAT_ACK | CHAT_SYN;
+        sprintf(response.buff, "%s Login success!\n", user->name);
+        strcpy(response.from, name);
+        send(new_fd, (void *)&response, sizeof(response), 0);
+    }
     return new_fd;
 }
 

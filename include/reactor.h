@@ -8,5 +8,6 @@
 #ifndef _REACTOR_H
 #define _REACTOR_H
 int add_to_reactor(int subfd, struct User *newuser);
+int del_from_reactor(int subfd, struct User *newuser);
 void *sub_reactor(void *args);
 #endif

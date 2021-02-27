@@ -31,4 +31,5 @@ struct Msg {
     char buff[1024];
 };
 void *client_discover(void *arg);
+void logout(int signum);
 #endif

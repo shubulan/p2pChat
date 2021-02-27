@@ -16,7 +16,7 @@ void *heart_beat(void *arg) {
     heart.type = CHAT_HEART;
     while (1) {
         for (int i = 0; i < MAX_USR; i++) {
-            if (users[i].flag) {
+            if (users[i].flag == FL_ONLINE) {
                 send(users[i].fd, (void *)&heart, sizeof(heart), 0);
             }
         }
