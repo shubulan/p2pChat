@@ -1,12 +1,11 @@
 /*************************************************************************
-	> File Name: reactor.h
+	> File Name: send_chat.h
 	> Author: shubulan
 	> Mail: gaoyulong1996@163.com
-	> Created Time: Wed 24 Feb 2021 03:54:37 PM CST
+	> Created Time: Fri 26 Feb 2021 05:30:31 PM CST
  ************************************************************************/
 
-#ifndef _REACTOR_H
-#define _REACTOR_H
-int add_to_reactor(int subfd, struct User *newuser);
-void *sub_reactor(void *args);
+#ifndef _SEND_CHAT_H
+#define _SEND_CHAT_H
+void *send_chat(void *arg);
 #endif

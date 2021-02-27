@@ -39,7 +39,8 @@ int udp_connect(struct sockaddr_in *client) {
     if ((sockfd = udp_socket_s(port)) < 0) {
         return -1;
     }
-    if (connect(sockfd, (struct sockaddr *)client, sizeof(struct sockaddr)) < 0) {
+    client->sin_port = htons(port);
+    if (connect(sockfd, (struct sockaddr *)client, sizeof(struct sockaddr_in)) < 0) {
         return -1;
     }
     return sockfd;
@@ -70,13 +71,16 @@ int udp_accept(int fd, struct User *user) {
         return -1;
     }
     */
-    if (request.type != CHAT_SYN) {
+    if ((request.type & CHAT_SYN)&&(request.type & CHAT_ACK)) {
+        DBG(L_GREEN"<accept>"NONE" : SYNACK recived!\n"); 
+    } else if (request.type != CHAT_SYN) {
         response.type = CHAT_FIN; 
         strcpy(response.buff, "request isn't SYN!");
         sendto(fd, (void *)&response, sizeof(response), 0, (struct sockaddr *)&client, len);
         return -1;
     }
-    DBG("<receve SYN> from: %s\n", request.from);
+    DBG("<recieve SYN> from: %s\n", request.from);
+    DBG("  Msg: %s\n", request.buff);
 
     strcpy(user->name, request.from);
     user->flag = FL_ONLINE;
@@ -89,6 +93,7 @@ int udp_accept(int fd, struct User *user) {
     sprintf(response.buff, "%s Login success!\n", user->name);
     response.type = CHAT_ACK | CHAT_SYN;
     send(new_fd, (void *)&response, sizeof(response), 0);
+    DBG("ack response send back!\n");
 
     return new_fd;
 }

@@ -1,12 +1,11 @@
 /*************************************************************************
-	> File Name: reactor.h
+	> File Name: include/heart.h
 	> Author: shubulan
 	> Mail: gaoyulong1996@163.com
-	> Created Time: Wed 24 Feb 2021 03:54:37 PM CST
+	> Created Time: Fri 26 Feb 2021 10:39:25 AM CST
  ************************************************************************/
 
-#ifndef _REACTOR_H
-#define _REACTOR_H
-int add_to_reactor(int subfd, struct User *newuser);
-void *sub_reactor(void *args);
+#ifndef HEART_H
+#define HEART_H
+void *heart_beat(void *args);
 #endif

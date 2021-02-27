@@ -24,6 +24,8 @@
 #include "conf.h"
 #include "color.h"
 #include "reactor.h"
+#include "heart.h"
+#include "send_chat.h"
 
 #ifdef _D
 #define DBG(fmt, args...) fprintf(stderr, fmt, ##args)

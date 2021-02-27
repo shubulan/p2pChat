@@ -6,9 +6,9 @@
  ************************************************************************/
 
 #include "myhead.h"
-#define MAXUSR 500
 
-extern struct User users[MAXUSR];
+extern struct User *users;
+extern int subfd;
 void add_event_ptr(int epollfd, int fd, int events, struct User *user) {
     struct epoll_event ev;
     ev.events = events;
@@ -19,7 +19,34 @@ void add_event_ptr(int epollfd, int fd, int events, struct User *user) {
 int add_to_reactor(int fd, struct User *user) {
     int sub = user->fd;
     users[sub] = *user;
-
-    add_event_ptr(fd, user[sub].fd, EPOLLIN | EPOLLET, &user[sub]);
+    add_event_ptr(fd, users[sub].fd, EPOLLIN | EPOLLET, &users[sub]);
+}
+void *sub_reactor(void *args) {
+    struct epoll_event events[20];
+    struct Msg msg;
+    while (1) {
+        int nfds = epoll_wait(subfd, events, 20, -1);
+        if (nfds < 0) exit(1);
+        for (int i = 0; i < nfds; i++) {
+            int fd = ((struct User *)events[i].data.ptr)->fd;
+            recv(fd, &msg, sizeof(msg), 0);
+            if (msg.type & CHAT_HEART) {
+                printf("heart from %s\n", msg.from);   
+                msg.type = CHAT_ACK;
+                send(fd, &msg, sizeof(msg), 0);
+            } else if (msg.type & CHAT_ACK) {
+                printf("ACK from %s\n", msg.from);
+            } else if (msg.type & CHAT_FIN){
+                printf("bai bai\n");
+                //epoll_ctl del
+                users[fd].flag = FL_OFFLINE;
+            } else if (msg.type & CHAT_MSG) {
+                printf("recv a msg......%s\n", msg.buff);
+            } else {
+                printf("lkasjdf\n");
+            }
+        }
+    }
+    
 }
 

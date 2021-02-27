@@ -7,9 +7,10 @@
 
 #ifndef _CHAT_H
 #define _CHAT_H
-
+#define MAX_USR 500
 #define FL_SYNSENT 0x001
 #define FL_ONLINE 0x002
+#define FL_OFFLINE 0x003
 struct User {
     char name[20];
     char ip[20];
@@ -22,6 +23,7 @@ struct User {
 #define CHAT_ACK 0x002
 #define CHAT_FIN 0x004
 #define CHAT_HEART 0x008
+#define CHAT_MSG 0x010
 struct Msg {
     int type;
     char from[20];
