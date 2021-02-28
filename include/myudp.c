@@ -81,6 +81,7 @@ int udp_accept(int fd, struct User *user) {
     }
     strcpy(user->name, request.from);
     user->flag = FL_ONLINE;
+    user->heart_cnt = 0;
     new_fd = udp_connect(&client);
     if (new_fd < 0) {
         perror("udp_connect");

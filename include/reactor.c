@@ -34,6 +34,7 @@ void *sub_reactor(void *args) {
         for (int i = 0; i < nfds; i++) {
             int fd = ((struct User *)events[i].data.ptr)->fd;
             recv(fd, &msg, sizeof(msg), 0);
+            users[fd].heart_cnt = 0;
             if (msg.type & CHAT_HEART) {
                 DBG(L_RED"<sub reactor>"NONE" heart from %s\n", msg.from);   
                 msg.type = CHAT_ACK;
@@ -49,6 +50,7 @@ void *sub_reactor(void *args) {
                 DBG(L_RED"<sub reactor>"NONE" %s is leaving..", msg.from);
             } else if (msg.type & CHAT_MSG) {
                 DBG(L_RED"<sub reactor>"NONE" msg from %s:%s\n", msg.from, msg.buff);
+                printf(L_BLUE"<%s> :"NONE" %s", msg.from, msg.buff);
             } else {
                 DBG(L_RED"<sub reactor>"NONE" unkonw msg\n");
             }
