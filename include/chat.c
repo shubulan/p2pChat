@@ -51,6 +51,7 @@ void logout(int signum) {
             send(users[i].fd, &lmsg, sizeof(lmsg), 0);
         }
     }
+    endwin();
     DBG(L_RED"%s quit!!"NONE, name);
     exit(1);
 }

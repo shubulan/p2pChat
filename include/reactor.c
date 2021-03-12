@@ -50,7 +50,7 @@ void *sub_reactor(void *args) {
                 DBG(L_RED"<sub reactor>"NONE" %s is leaving..", msg.from);
             } else if (msg.type & CHAT_MSG) {
                 DBG(L_RED"<sub reactor>"NONE" msg from %s:%s\n", msg.from, msg.buff);
-                printf(L_BLUE"<%s> :"NONE" %s", msg.from, msg.buff);
+                printf(L_BLUE"<%s> :"NONE" %s\n", msg.from, msg.buff);
             } else {
                 DBG(L_RED"<sub reactor>"NONE" unkonw msg\n");
             }

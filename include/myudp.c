@@ -79,6 +79,7 @@ int udp_accept(int fd, struct User *user) {
         sendto(fd, (void *)&response, sizeof(response), 0, (struct sockaddr *)&client, len);
         return -1;
     }
+    //至此一定收到了syn 或者syn+ack包，此时建立连接
     strcpy(user->name, request.from);
     user->flag = FL_ONLINE;
     user->heart_cnt = 0;

@@ -1,7 +1,7 @@
-CFLAGS += -D _D
+CFLAGS +=  
 .PHONY : clean
-p2pchat.out : p2pchat.o include/conf.o include/myudp.o include/reactor.o include/chat.o include/heart.o include/send_chat.o
-	gcc p2pchat.o include/conf.o include/myudp.o include/reactor.o include/chat.o include/heart.o include/send_chat.o -pthread $(CFLAGS) -pthread -o p2pchat.out 
+chat.out : p2pchat.o include/conf.o include/myudp.o include/reactor.o include/chat.o include/heart.o include/send_chat.o include/chat_ui.o
+	gcc p2pchat.o include/conf.o include/myudp.o include/reactor.o include/chat.o include/heart.o include/send_chat.o include/chat_ui.o -pthread $(CFLAGS) -pthread -lncursesw -o chat.out
 p2pchat.o : p2pchat.c include/myhead.h
 	gcc -c p2pchat.c $(CFLAGS) -Iinclude -o p2pchat.o
 include/conf.o : include/conf.c include/conf.h
@@ -16,6 +16,8 @@ include/heart.o : include/heart.c include/heart.h
 	gcc -c include/heart.c $(CFLAGS) -Iinclude -o include/heart.o
 include/send_chat.o : include/send_chat.c include/send_chat.h
 	gcc -c include/send_chat.c $(CFLAGS) -Iinclude -o include/send_chat.o
+include/chat_ui.o : include/chat_ui.c include/chat_ui.h
+	gcc -c include/chat_ui.c $(CFLAGS) -Iinclude -o include/chat_ui.o
 clean:
 	rm -f p2pchat.o include/myudp.o include/reactor.o include/chat.o include/heart.o include/send_chat.o include/conf.o
 

@@ -18,6 +18,8 @@
 #include <string.h>
 #include <pthread.h>
 #include <signal.h>
+#include <curses.h>
+#include <locale.h>
 
 
 #include "chat.h"
@@ -27,6 +29,7 @@
 #include "reactor.h"
 #include "heart.h"
 #include "send_chat.h"
+#include "chat_ui.h"
 
 #ifdef _D
 #define DBG(fmt, args...) fprintf(stderr, fmt, ##args)

@@ -34,8 +34,9 @@ int main(int argc, char **argv) {
         }
     }
     signal(SIGINT, logout);
+    init_ui();
 
-    //命令行参数没写，读取配置文件
+    //如果没有命令行参数，读取配置文件
     if (!strlen(name)) {
         strcpy(name, read_conf(config, "name"));
     }
