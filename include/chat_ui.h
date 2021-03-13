@@ -7,5 +7,10 @@
 
 #ifndef _CHAT_UI_H
 #define _CHAT_UI_H
+#include "myhead.h"
+#define MAX_MSG 1024
 void init_ui();
+extern pthread_mutex_t mainMutex;
+extern char *chatMsg[MAX_MSG];
+extern int msgTail;
 #endif

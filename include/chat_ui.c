@@ -13,6 +13,10 @@
 #define XMID X * 0.8
 WINDOW *box1Win, *box2Win , *box3Win;
 WINDOW *mainWin, *subWin , *inputWin;
+pthread_mutex_t mainMutex;
+char *chatMSG[MAX_MSG];
+int mainX = Y - INPUTH - 2;
+int msgTail = 0;
 
 void init_ui() {
     setlocale(LC_ALL, "");
@@ -27,16 +31,15 @@ void init_ui() {
     wrefresh(box1Win);
     wrefresh(box2Win);
     wrefresh(box3Win);
-    mainWin = newwin(Y - INPUTH - 2, XMID - 1 - 2, 1, 1);
+    pthread_mutex_init(&mainMutex, NULL);
+    mainWin = newwin(mainX, XMID - 1 - 2, 1, 1);
     subWin = newwin(Y - 2, X - XMID - 2, 1, XMID + 1);
     inputWin = newwin(INPUTH - 2, XMID - 1 - 2, Y - INPUTH + 1, 1);
-    mvwprintw(mainWin, 0, 0 ,"here");
-    mvwprintw(subWin, 0, 0 ,"here");
-    mvwprintw(inputWin, 0, 0 ,"here");
+    //mvwprintw(mainWin, 0, 0 ,"here");
+    //mvwprintw(subWin, 0, 0 ,"here");
+    //mvwprintw(inputWin, 0, 0 ,"here");
     wrefresh(mainWin);
     wrefresh(subWin);
     wrefresh(inputWin);
-
-
     return ;
 }
