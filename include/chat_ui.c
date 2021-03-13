@@ -14,7 +14,8 @@
 WINDOW *box1Win, *box2Win , *box3Win;
 WINDOW *mainWin, *subWin , *inputWin;
 pthread_mutex_t mainMutex;
-char *chatMSG[MAX_MSG];
+
+char *chatMsg[MAX_MSG];
 int mainX = Y - INPUTH - 2;
 int msgTail = 0;
 
@@ -41,5 +42,19 @@ void init_ui() {
     wrefresh(mainWin);
     wrefresh(subWin);
     wrefresh(inputWin);
+    return ;
+}
+void drawMain() {
+    int beg;
+    pthread_mutex_lock(&mainMutex);
+    if (msgTail < mainX) beg = 0;
+    else beg = msgTail - mainX;
+
+    for (int i = 0; i < msgTail; i++) {
+        mvwprintw(mainWin, i, 2, chatMsg[beg + i]);
+    }
+    pthread_mutex_unlock(&mainMutex);
+    wrefresh(mainWin);
+
     return ;
 }

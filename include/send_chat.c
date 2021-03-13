@@ -9,6 +9,7 @@
 extern char name[20];
 extern WINDOW *inputWin;
 extern struct User *users;
+char inputmsg[2046]; 
 void *send_chat(void *arg) {
     struct Msg msg;
     strcpy(msg.from, name);
@@ -20,7 +21,13 @@ void *send_chat(void *arg) {
         mvwprintw(inputWin, 1, 0, "Input: ");
         wrefresh(inputWin);
         wscanw(inputWin, "%s", msg.buff);
-
+        memset(inputmsg, 0, 2046);
+        sprintf(inputmsg,"%s: %s", name, msg.buff);
+        pthread_mutex_lock(&mainMutex);
+        chatMsg[msgTail] = strdup(inputmsg);
+        msgTail++;
+        pthread_mutex_unlock(&mainMutex);
+        drawMain();
 
         for (int i = 0; i < MAX_USR; i++) {
             if (users[i].flag) {
