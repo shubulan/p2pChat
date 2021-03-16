@@ -11,7 +11,10 @@
 #define MAX_MSG 1024
 void init_ui();
 void drawMain();
+void drawSub();
 extern pthread_mutex_t mainMutex;
 extern char *chatMsg[MAX_MSG];
+extern char *userName[MAX_MSG];
 extern int msgTail;
+extern int userTail;
 #endif

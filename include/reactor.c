@@ -25,6 +25,7 @@ int del_from_reactor(int fd, struct User *user) {
     epoll_ctl(subfd, EPOLL_CTL_DEL, fd, NULL);
     return 1;
 }
+char recvMsg[2046];
 void *sub_reactor(void *args) {
     struct epoll_event events[20];
     struct Msg msg;
@@ -33,6 +34,8 @@ void *sub_reactor(void *args) {
         if (nfds < 0) exit(1);
         for (int i = 0; i < nfds; i++) {
             int fd = ((struct User *)events[i].data.ptr)->fd;
+            memset(&msg, 0, sizeof(msg));
+            memset(recvMsg, 0, sizeof(recvMsg));
             recv(fd, &msg, sizeof(msg), 0);
             users[fd].heart_cnt = 0;
             if (msg.type & CHAT_HEART) {
@@ -47,10 +50,20 @@ void *sub_reactor(void *args) {
                 del_from_reactor(fd, &users[i]);
                 close(fd);
                 users[fd].flag = FL_OFFLINE;
+                sprintf(recvMsg, "           %s %s", msg.from, "is offline.");
+                pthread_mutex_lock(&mainMutex);
+                chatMsg[msgTail++] = strdup(recvMsg);
+                pthread_mutex_unlock(&mainMutex);
+                drawMain();
                 DBG(L_RED"<sub reactor>"NONE" %s is leaving..", msg.from);
             } else if (msg.type & CHAT_MSG) {
                 DBG(L_RED"<sub reactor>"NONE" msg from %s:%s\n", msg.from, msg.buff);
-                printf(L_BLUE"<%s> :"NONE" %s\n", msg.from, msg.buff);
+                sprintf(recvMsg, "%s : %s", msg.from, msg.buff);
+                pthread_mutex_lock(&mainMutex);
+                chatMsg[msgTail++] = strdup(recvMsg);
+                pthread_mutex_unlock(&mainMutex);
+                drawMain();
+                //printf(L_BLUE"<%s> :"NONE" %s\n", msg.from, msg.buff);
             } else {
                 DBG(L_RED"<sub reactor>"NONE" unkonw msg\n");
             }

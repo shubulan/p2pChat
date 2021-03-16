@@ -16,8 +16,11 @@ WINDOW *mainWin, *subWin , *inputWin;
 pthread_mutex_t mainMutex;
 
 char *chatMsg[MAX_MSG];
+char *userName[MAX_MSG];
+extern char name[20];
 int mainX = Y - INPUTH - 2;
 int msgTail = 0;
+int userTail = 0;
 
 void init_ui() {
     setlocale(LC_ALL, "");
@@ -36,7 +39,10 @@ void init_ui() {
     mainWin = newwin(mainX, XMID - 1 - 2, 1, 1);
     subWin = newwin(Y - 2, X - XMID - 2, 1, XMID + 1);
     inputWin = newwin(INPUTH - 2, XMID - 1 - 2, Y - INPUTH + 1, 1);
-    //mvwprintw(mainWin, 0, 0 ,"here");
+    userName[userTail++] = strdup("    online ");
+    userName[userTail++] = strdup(name);
+    drawSub();
+    //mvwprintw(mainWin, 0, 0 ,name);
     //mvwprintw(subWin, 0, 0 ,"here");
     //mvwprintw(inputWin, 0, 0 ,"here");
     wrefresh(mainWin);
@@ -44,12 +50,21 @@ void init_ui() {
     wrefresh(inputWin);
     return ;
 }
+void drawSub() {
+    int beg;
+    if (userTail < X - XMID - 2) beg = 0;
+    else beg = msgTail - X + XMID + 2;
+    for (int i = 0; i < userTail; i++) {
+        mvwprintw(subWin, i, 1, userName[beg + i]);
+    }
+    wrefresh(subWin);
+    
+}
 void drawMain() {
     int beg;
     pthread_mutex_lock(&mainMutex);
     if (msgTail < mainX) beg = 0;
     else beg = msgTail - mainX;
-
     for (int i = 0; i < msgTail; i++) {
         mvwprintw(mainWin, i, 2, chatMsg[beg + i]);
     }

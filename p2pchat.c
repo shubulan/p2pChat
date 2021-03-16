@@ -34,7 +34,6 @@ int main(int argc, char **argv) {
         }
     }
     signal(SIGINT, logout);
-    init_ui();
 
     //如果没有命令行参数，读取配置文件
     if (!strlen(name)) {
@@ -78,6 +77,7 @@ int main(int argc, char **argv) {
         perror("epoll_ctl");
         exit(1);
     }
+    init_ui();
     
     pthread_t c_discover, heart_beat_tid, reactor_tid, send_tid;
     pthread_create(&c_discover, NULL, client_discover, NULL);
